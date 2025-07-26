@@ -58,6 +58,27 @@ export default function HealthcareChatAgent() {
     time: "10:30 AM",
     doctor: "Dr. Emily Zhang",
     location: "Room 201, Midtown Clinic"
+  },
+  {
+    id: "2",
+    date: "2025-08-03",
+    time: "2:00 PM",
+    doctor: "Dr. Marcus Lee",
+    location: "East Wing, NY General Hospital"
+  },
+  {
+    id: "3",
+    date: "2025-08-05",
+    time: "9:00 AM",
+    doctor: "Dr. Sofia Ramirez",
+    location: "Downtown Health Center"
+  },
+  {
+    id: "4",
+    date: "2025-08-07",
+    time: "1:15 PM",
+    doctor: "Dr. James O'Connor",
+    location: "Uptown Family Practice"
   }
 ]);
 
@@ -255,7 +276,7 @@ export default function HealthcareChatAgent() {
           </div>
 
         {/* Right Sidebar */}
-        <div className="w-80 bg-white dark:bg-slate-800 border-l border-strong p-6 space-y-6 shadow-lg">
+        <div className="w-80 bg-white dark:bg-slate-800 border-l border-strong p-6 space-y-6 shadow-lg" style={{ overflow: "scroll" }}>
           {/* Quick Actions */}
           <h2 style={{ textAlign: "center", fontWeight: "bold" }}>Your Upcoming Appointments</h2>
           {appointments.map((appointment) => (
