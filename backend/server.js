@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { getSignedUrl, getCurrentAgentInfo } = require('./elevenlabs-client');
 const { processConversationFeedback } = require('./feedback-loop');
+const createPaymentLink = require('./Stripe/paymentlink'); // Import the payment link creation function
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 
 // Global state
 let agentState = {
@@ -22,10 +24,25 @@ let agentState = {
 
 // Routes
 
+
 /**
  * GET /api/get-signed-url
  * Returns a signed URL for starting a conversation with the current agent
  */
+
+app.post('/api/create-payment-link', async (req, res) => {
+    const { name, priceInDollars } = req.body;
+    createPaymentLink(name, priceInDollars)
+    .then((url) => {
+        res.json({ url });
+    }); 
+});
+
+
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Test endpoint is working!' });
+});
+
 app.get('/api/get-signed-url', async (req, res) => {
     try {
         const signedUrl = await getSignedUrl();
