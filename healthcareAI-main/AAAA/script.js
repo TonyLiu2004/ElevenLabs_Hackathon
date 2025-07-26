@@ -75,7 +75,6 @@ export async function startConversation() {
             }
         };
 
-
         // Start conversation
         conversation = await Conversation.startSession(conversationConfig);
     } catch (error) {

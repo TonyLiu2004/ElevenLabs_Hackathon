@@ -51,7 +51,16 @@ export default function HealthcareChatAgent() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   
-  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [appointments, setAppointments] = useState<Appointment[]>([
+  {
+    id: "1",
+    date: "2025-08-01",
+    time: "10:30 AM",
+    doctor: "Dr. Emily Zhang",
+    location: "Room 201, Midtown Clinic"
+  }
+]);
+
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -235,10 +244,11 @@ export default function HealthcareChatAgent() {
           {/* Input Area */}
           <div className="p-6 bg-white dark:bg-slate-800 border-t border-strong shadow-lg flex items-center justify-center">
             <div className="max-w-2xl flex gap-3">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
-              onClick={startConversation}
+              <button
+                className="px-4 py-4 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition text-3xl flex items-center justify-center"
+                onClick={startConversation}
               >
-                Test
+                🎙️
               </button>
             </div>
           </div>
@@ -247,6 +257,7 @@ export default function HealthcareChatAgent() {
         {/* Right Sidebar */}
         <div className="w-80 bg-white dark:bg-slate-800 border-l border-strong p-6 space-y-6 shadow-lg">
           {/* Quick Actions */}
+          <h2 style={{ textAlign: "center", fontWeight: "bold" }}>Your Upcoming Appointments</h2>
           {appointments.map((appointment) => (
         <Card
           key={appointment.id}
