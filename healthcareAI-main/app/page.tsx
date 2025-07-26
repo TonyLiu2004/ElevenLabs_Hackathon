@@ -37,27 +37,20 @@ interface Message {
   timestamp: Date
 }
 
+interface Appointment {
+  id: string
+  date: string
+  time: string
+  doctor: string
+  location: string
+}
+
 export default function HealthcareChatAgent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   
-  const [appointments, setAppointments] = useState([
-    {
-      id: "1",
-      date: "2023-10-15",
-      time: "10:00 AM",
-      doctor: "Dr. Smith",
-      location: "Health Clinic - Room 101",
-    },
-    {
-      id: "2",
-      date: "2023-10-16",
-      time: "2:30 PM",
-      doctor: "Dr. Johnson",
-      location: "Wellness Center - Room 202",
-    },
-  ])
+  const [appointments, setAppointments] = useState<Appointment[]>([])
 
   const handleSend = async () => {
     if (!input.trim()) return
