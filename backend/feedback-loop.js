@@ -74,7 +74,6 @@ async function processConversationFeedback(currentPrompt = null) {
         
         // Step 2: Get detailed conversation data
         const conversationDetails = await getConversationDetails(conversation.conversation_id);
-        
         // Step 3: Get current agent prompt if not provided
         if (!currentPrompt) {
             const currentAgent = await getCurrentAgentInfo();
@@ -83,6 +82,7 @@ async function processConversationFeedback(currentPrompt = null) {
         
         // Step 4: Extract conversation transcript
         const transcript = conversationDetails.transcript || [];
+        console.log(transcript)
         const userMessages = transcript.filter(msg => msg.role === 'user');
         const agentMessages = transcript.filter(msg => msg.role === 'agent');
         

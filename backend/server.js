@@ -3,15 +3,24 @@ const express = require('express');
 const cors = require('cors');
 const { getSignedUrl, getCurrentAgentInfo } = require('./elevenlabs-client');
 const { processConversationFeedback } = require('./feedback-loop');
-const createPaymentLink = require('./Stripe/paymentlink'); // Import the payment link creation function
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const admin = require('firebase-admin');
+const path = require('path');
+
+const serviceAccount = require(path.resolve(__dirname, './Firebase/elevenlabs-hackathon-b13ce-firebase-adminsdk-fbsvc-b58339da70.json'));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const db = admin.firestore();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
-
 
 // Global state
 let agentState = {
@@ -24,25 +33,61 @@ let agentState = {
 
 // Routes
 
+app.post('/api/appointments', async (req, res) => {
+  try {
+    const data = req.body;
+    console.log("appointment: ", req.body)
+
+    if (!data || Object.keys(data).length === 0) {
+      return res.status(400).json({ error: 'Missing appointment data' });
+    }
+
+    // check if appointment time is already booked
+
+    // Query for existing appointment
+    const existingSnapshot = await db.collection('Appointments')
+      .where('doctorId', '==', data.doctorId)
+      .where('date', '==', data.date)
+      .where('time', '==', data.time)
+      .get();
+
+    if (!existingSnapshot.empty) {
+        console.log("Appointment time already booked: ", data.date, data.time)
+        return res.status(409).json({ error: 'Appointment time already booked' });
+    }
+
+    //add appointment
+    const appointmentRef = await db.collection('Appointments').add({
+      ...data,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    res.status(201).json({ id: appointmentRef.id, message: 'Appointment created successfully' });
+  } catch (err) {
+    console.error('Error creating appointment:', err);
+    res.status(500).json({ error: 'Failed to create appointment' });
+  }
+});
+
+// Test Firebase connection
+// app.get('/api/test-firebase', async (req, res) => {
+//   try {
+//     await db.collection('Test').doc('ConnectionCheck').set({
+//       status: 'connected',
+//       timestamp: new Date().toISOString(),
+//     });
+//     res.status(200).send('✅ Firebase connection successful.');
+//   } catch (error) {
+//     console.error('❌ Firebase connection failed:', error);
+//     res.status(500).send('❌ Firebase connection failed.');
+//   }
+// });
+
 
 /**
  * GET /api/get-signed-url
  * Returns a signed URL for starting a conversation with the current agent
  */
-
-app.post('/api/create-payment-link', async (req, res) => {
-    const { name, priceInDollars } = req.body;
-    createPaymentLink(name, priceInDollars)
-    .then((url) => {
-        res.json({ url });
-    }); 
-});
-
-
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'Test endpoint is working!' });
-});
-
 app.get('/api/get-signed-url', async (req, res) => {
     try {
         const signedUrl = await getSignedUrl();

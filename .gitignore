@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 dist/
 *.log
+/backend/Firebase/elevenlabs-hackathon-b13ce-firebase-adminsdk-fbsvc-b58339da70.json
