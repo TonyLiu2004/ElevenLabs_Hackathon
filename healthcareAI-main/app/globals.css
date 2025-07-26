@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme with enhanced contrast */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 35%; /* Increased contrast from 46.9% */
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 85%; /* Slightly darker for better definition */
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+
+    /* Healthcare-specific high contrast colors */
+    --text-primary: 222.2 84% 4.9%; /* Very dark for maximum contrast */
+    --text-secondary: 215.4 16.3% 25%; /* Darker secondary text */
+    --text-muted: 215.4 16.3% 35%; /* Accessible muted text */
+    --surface-elevated: 0 0% 98%; /* Slightly off-white for cards */
+    --border-strong: 214.3 31.8% 75%; /* Stronger borders */
+  }
+
+  .dark {
+    /* Dark theme with enhanced contrast */
+    --background: 222.2 84% 4.9%; /* Very dark background */
+    --foreground: 210 40% 98%; /* Very light text */
+    --card: 217.2 32.6% 8%; /* Darker cards for better contrast */
+    --card-foreground: 210 40% 98%;
+    --popover: 217.2 32.6% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 12%; /* Darker secondary */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 12%;
+    --muted-foreground: 215 20.2% 75%; /* Much lighter for better contrast */
+    --accent: 217.2 32.6% 12%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 50%; /* Adjusted for better contrast */
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 20%; /* Lighter borders for visibility */
+    --input: 217.2 32.6% 12%;
+    --ring: 212.7 26.8% 83.9%;
+
+    /* Healthcare-specific high contrast colors for dark mode */
+    --text-primary: 210 40% 98%; /* Maximum contrast white */
+    --text-secondary: 215 20.2% 85%; /* High contrast secondary */
+    --text-muted: 215 20.2% 70%; /* Accessible muted text */
+    --surface-elevated: 217.2 32.6% 10%; /* Elevated surfaces */
+    --border-strong: 217.2 32.6% 25%; /* Stronger borders */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* High contrast utilities */
+@layer utilities {
+  .text-contrast-high {
+    color: hsl(var(--text-primary));
+  }
+
+  .text-contrast-medium {
+    color: hsl(var(--text-secondary));
+  }
+
+  .text-contrast-accessible {
+    color: hsl(var(--text-muted));
+  }
+
+  .bg-surface-elevated {
+    background-color: hsl(var(--surface-elevated));
+  }
+
+  .border-strong {
+    border-color: hsl(var(--border-strong));
+  }
+
+  /* Focus indicators with high contrast */
+  .focus-visible-high-contrast {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* High contrast button variants */
+  .btn-high-contrast {
+    @apply bg-slate-900 text-white border-2 border-slate-900 hover:bg-white hover:text-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100 dark:hover:bg-slate-900 dark:hover:text-slate-100;
+  }
+}
