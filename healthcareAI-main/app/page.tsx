@@ -10,6 +10,7 @@ import { Send, Settings, User, MicOff, Calendar, Clock, MapPin, Phone, Heart } f
 import { Inter, Poppins, Source_Sans_3 } from "next/font/google"
 import Image from "next/image"
 import { ThemeToggle } from "@/components/theme-toggle"
+import {startConversation} from "@/AAAA/script"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -232,12 +233,16 @@ export default function HealthcareChatAgent() {
           </div>
 
           {/* Input Area */}
-          <div className="p-6 bg-white dark:bg-slate-800 border-t border-strong shadow-lg">
+          <div className="p-6 bg-white dark:bg-slate-800 border-t border-strong shadow-lg flex items-center justify-center">
             <div className="max-w-2xl flex gap-3">
-  
+              <button className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+              onClick={startConversation}
+              >
+                Test
+              </button>
             </div>
           </div>
-        </div>
+          </div>
 
         {/* Right Sidebar */}
         <div className="w-80 bg-white dark:bg-slate-800 border-l border-strong p-6 space-y-6 shadow-lg">
