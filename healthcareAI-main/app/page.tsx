@@ -38,17 +38,26 @@ interface Message {
 }
 
 export default function HealthcareChatAgent() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      content:
-        "Hello! I'm your healthcare assistant. I can help you book appointments, find doctors, and answer medical questions. How can I assist you today?",
-      role: "assistant",
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  
+  const [appointments, setAppointments] = useState([
+    {
+      id: "1",
+      date: "2023-10-15",
+      time: "10:00 AM",
+      doctor: "Dr. Smith",
+      location: "Health Clinic - Room 101",
+    },
+    {
+      id: "2",
+      date: "2023-10-16",
+      time: "2:30 PM",
+      doctor: "Dr. Johnson",
+      location: "Wellness Center - Room 202",
+    },
+  ])
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -232,25 +241,7 @@ export default function HealthcareChatAgent() {
           {/* Input Area */}
           <div className="p-6 bg-white dark:bg-slate-800 border-t border-strong shadow-lg">
             <div className="max-w-2xl flex gap-3">
-              <div className="flex-1 relative">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your message or ask about appointments..."
-                  className="pr-12 border-2 border-strong focus:border-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 bg-white dark:bg-slate-700 text-contrast-high placeholder:text-contrast-accessible shadow-sm"
-                  disabled={isLoading}
-                  aria-label="Type your message"
-                />
-              </div>
-              <Button
-                onClick={handleSend}
-                disabled={!input.trim() || isLoading}
-                className="bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 shadow-md border-2 border-blue-600 focus-visible-high-contrast disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Send message"
-              >
-                <Send className="w-4 h-4" aria-hidden="true" />
-              </Button>
+  
             </div>
           </div>
         </div>
@@ -258,143 +249,62 @@ export default function HealthcareChatAgent() {
         {/* Right Sidebar */}
         <div className="w-80 bg-white dark:bg-slate-800 border-l border-strong p-6 space-y-6 shadow-lg">
           {/* Quick Actions */}
-          <section aria-labelledby="quick-actions-heading">
-            <div className="flex items-center gap-2 mb-4">
-              <Calendar className="w-5 h-5 text-blue-700 dark:text-blue-400" aria-hidden="true" />
-              <h3 id="quick-actions-heading" className="font-semibold text-contrast-high font-poppins">
-                Quick Actions
-              </h3>
+          {appointments.map((appointment) => (
+        <Card
+          key={appointment.id}
+          className="p-4 border-2 border-strong bg-surface-elevated shadow-lg"
+        >
+          <div className="flex justify-between items-start mb-3">
+            <div>
+              <p className="text-sm font-medium text-contrast-high">Consultation</p>
+              <p className="text-xs text-contrast-accessible">
+                <time dateTime={appointment.date}>{appointment.date}</time>
+              </p>
             </div>
-            <div className="space-y-3" role="group" aria-labelledby="quick-actions-heading">
-              <Button className="w-full bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white justify-start shadow-md border-2 border-blue-600 focus-visible-high-contrast">
-                Book New Appointment
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-contrast-high border-2 border-strong bg-transparent hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-              >
-                Reschedule
-              </Button>
-              <Button className="w-full bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 text-white justify-start shadow-md border-2 border-red-600 focus-visible-high-contrast">
-                Emergency Care
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-contrast-high border-2 border-strong bg-transparent hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-              >
-                Prescription Refill
-              </Button>
-            </div>
-          </section>
+          </div>
 
-          {/* Upcoming Appointments */}
-          <section aria-labelledby="upcoming-appointments-heading">
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-blue-700 dark:text-blue-400" aria-hidden="true" />
-              <h3 id="upcoming-appointments-heading" className="font-semibold text-contrast-high font-poppins">
-                Upcoming
-              </h3>
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2">
+              <User
+                className="w-4 h-4 text-blue-700 dark:text-blue-400"
+                aria-hidden="true"
+              />
+              <div>
+                <p className="text-sm font-medium text-contrast-high">
+                  {appointment.doctor}
+                </p>
+              </div>
             </div>
 
-            <Card className="p-4 border-2 border-strong bg-surface-elevated shadow-lg">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <p className="text-sm font-medium text-contrast-high">Consultation</p>
-                  <p className="text-xs text-contrast-accessible">
-                    <time dateTime="2024-01-15">2024-01-15</time>
-                  </p>
-                </div>
-              </div>
+            <div className="flex items-center gap-2 text-xs text-contrast-accessible">
+              <Clock className="w-3 h-3" aria-hidden="true" />
+              <span>{appointment.time}</span>
+            </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-blue-700 dark:text-blue-400" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-medium text-contrast-high">Dr. Sarah Johnson</p>
-                    <p className="text-xs text-contrast-accessible">Cardiology</p>
-                  </div>
-                </div>
+            <div className="flex items-center gap-2 text-xs text-contrast-accessible">
+              <MapPin className="w-3 h-3" aria-hidden="true" />
+              <span>{appointment.location}</span>
+            </div>
+          </div>
 
-                <div className="flex items-center gap-2 text-xs text-contrast-accessible">
-                  <Clock className="w-3 h-3" aria-hidden="true" />
-                  <span>10:30 AM</span>
-                </div>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-contrast-medium hover:text-contrast-high hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
+              aria-label="Call doctor"
+            >
+              <Phone className="w-4 h-4" />
+            </Button>
+          </div>
+        </Card>
+      ))}
 
-                <div className="flex items-center gap-2 text-xs text-contrast-accessible">
-                  <MapPin className="w-3 h-3" aria-hidden="true" />
-                  <span>Medical Center - Floor 3</span>
-                </div>
-              </div>
+          
 
-              <div className="flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs bg-transparent border-2 border-strong text-contrast-high hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-                >
-                  Reschedule
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-contrast-medium hover:text-contrast-high hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-                  aria-label="Call doctor"
-                >
-                  <Phone className="w-4 h-4" />
-                </Button>
-              </div>
-            </Card>
+          
 
-            {/* Second appointment */}
-            <Card className="p-4 border-2 border-strong bg-surface-elevated mt-3 shadow-lg">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <p className="text-sm font-medium text-contrast-high">Follow-up</p>
-                  <p className="text-xs text-contrast-accessible">
-                    <time dateTime="2024-01-20">2024-01-20</time>
-                  </p>
-                </div>
-              </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-blue-700 dark:text-blue-400" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-medium text-contrast-high">Dr. Michael Chen</p>
-                    <p className="text-xs text-contrast-accessible">Dermatology</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-contrast-accessible">
-                  <Clock className="w-3 h-3" aria-hidden="true" />
-                  <span>2:15 PM</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-contrast-accessible">
-                  <MapPin className="w-3 h-3" aria-hidden="true" />
-                  <span>Video Call</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs bg-transparent border-2 border-strong text-contrast-high hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-                >
-                  Reschedule
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-contrast-medium hover:text-contrast-high hover:bg-slate-100 dark:hover:bg-slate-700 focus-visible-high-contrast"
-                  aria-label="Call doctor"
-                >
-                  <Phone className="w-4 h-4" />
-                </Button>
-              </div>
-            </Card>
-          </section>
         </div>
       </div>
     </div>
